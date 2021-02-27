@@ -14,7 +14,7 @@ void train(NN nn){
 
 
 int main(int argc,const char** argv){
-	NN nn=neural_network(2,2,1,0.01f);
+	NN nn=neural_network(2,2,1,0.1f);
 	for (uint32_t i=0;i<1000000;i++){
 		train(nn);
 	}
