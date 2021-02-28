@@ -6,8 +6,12 @@
 
 
 
-#define _SIGMOID(x) (0.5f+(x)/(2*(1+fabsf((x)))))
-#define _SIGMOID_DERIVATIVE(x) ((x)/(1-(x)))
+#ifdef FAST_SIGMOID
+#define _SIGMOID(x) (0.5f+(x)/(2+2*fabsf((x))))
+#else
+#define _SIGMOID(x) (1/(1+expf(-(x))))
+#endif
+#define _SIGMOID_DERIVATIVE(x) ((x)*(1-(x)))
 
 
 
@@ -28,13 +32,13 @@ NN neural_network(uint8_t i,uint8_t h,uint8_t o,float lr){
 	for (uint16_t j=0;j<(uint16_t)i*h;j++){
 		*(nn->hw+j)=((float)rand())/RAND_MAX*2-1;
 	}
-	for (uint16_t j=0;j<h;j++){
+	for (uint8_t j=0;j<h;j++){
 		*(nn->hb+j)=0;
 	}
 	for (uint16_t j=0;j<(uint16_t)h*o;j++){
 		*(nn->ow+j)=((float)rand())/RAND_MAX*2-1;
 	}
-	for (uint16_t j=0;j<o;j++){
+	for (uint8_t j=0;j<o;j++){
 		*(nn->ob+j)=0;
 	}
 	return nn;
@@ -80,7 +84,7 @@ void neural_network_train(NN nn,float* in,float* to){
 		float g=_SIGMOID_DERIVATIVE(v)*oe*nn->lr;
 		*(nn->ob+i)+=g;
 		for (uint8_t j=0;j<nn->h;j++){
-			*(nn->ow+i*nn->h+j)+=*(nn->_h+j)*v;
+			*(nn->ow+i*nn->h+j)+=*(nn->_h+j)*g;
 			*(nn->_e+j)+=*(nn->ow+i*nn->h+j)*oe;
 		}
 	}

@@ -1,23 +1,40 @@
 #include <nn.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 
 
 void train(NN nn){
-	float tmp[]={0,0,0,0,1,1,1,1,0,1,0,1};
+	float dt[]={0,0,0,0,1,1,1,1,0,1,0,1};
 	for (uint8_t i=0;i<12;i+=3){
-		neural_network_train(nn,tmp+i,tmp+i+2);
+		neural_network_train(nn,dt+i,dt+i+2);
 	}
 }
 
 
 
+void acc(NN nn){
+	float dt[]={0,0,0,0,1,1,1,1,0,1,0,1};
+	float* tmp=malloc(sizeof(float));
+	float a=0;
+	for (uint8_t i=0;i<12;i+=3){
+		neural_network_predict(nn,dt+i,tmp);
+		a+=fabsf(*(dt+i+2)-(*tmp));
+	}
+	free(tmp);
+	printf("Acc: %.2f%%\n",100-a/4*100);
+}
+
+
+
 int main(int argc,const char** argv){
-	NN nn=neural_network(2,2,1,0.1f);
-	for (uint32_t i=0;i<1000000;i++){
+	NN nn=neural_network(2,3,1,0.1f);
+	acc(nn);
+	for (uint32_t i=0;i<100000;i++){
 		train(nn);
 	}
+	acc(nn);
 	float* tmp=malloc(3*sizeof(float));
 	*tmp=0;
 	*(tmp+1)=0;
