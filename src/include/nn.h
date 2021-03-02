@@ -4,10 +4,6 @@
 
 
 
-// #define FAST_SIGMOID
-
-
-
 typedef struct __NN* NN;
 
 
