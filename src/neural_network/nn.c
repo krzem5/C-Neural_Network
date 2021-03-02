@@ -16,8 +16,7 @@
 
 
 NN neural_network(uint8_t i,uint8_t h,uint8_t o,float lr){
-	// srand((unsigned int)time(NULL));
-	srand((unsigned int)12345);
+	srand((unsigned int)time(NULL));
 	NN nn=malloc(sizeof(struct __NN)+(((uint64_t)i+3)*h+((uint64_t)h+1)*o)*sizeof(float));
 	nn->i=i;
 	nn->h=h;
