@@ -31,7 +31,7 @@ void acc(NN nn){
 int main(int argc,const char** argv){
 	NN nn=neural_network(2,3,1,0.1f);
 	acc(nn);
-	for (uint32_t i=0;i<100000;i++){
+	for (uint32_t i=0;i<10000;i++){
 		train(nn);
 	}
 	acc(nn);
